@@ -17,6 +17,8 @@ class TrinaScaledCheckbox extends StatelessWidget {
 
   final BorderSide? side;
 
+  final String? semanticLabel;
+
   const TrinaScaledCheckbox({
     super.key,
     required this.value,
@@ -27,6 +29,7 @@ class TrinaScaledCheckbox extends StatelessWidget {
     this.activeColor = Colors.lightBlue,
     this.checkColor = const Color(0xFFDCF5FF),
     this.side,
+    this.semanticLabel,
   });
 
   @override
@@ -40,6 +43,7 @@ class TrinaScaledCheckbox extends StatelessWidget {
         activeColor: value == null ? unselectedColor : activeColor,
         checkColor: checkColor,
         side: side,
+        semanticLabel: semanticLabel,
       ),
     );
   }

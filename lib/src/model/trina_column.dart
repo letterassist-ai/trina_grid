@@ -155,6 +155,15 @@ class TrinaColumn {
 
   bool Function(TrinaRow row)? disableRowCheckboxWhen;
 
+  /// The semantic label for the checkbox in the column title.
+  String? titleCheckboxSemanticLabel;
+
+  /// Callback to get the semantic label for the checkbox in the row.
+  String? Function(TrinaRow row)? rowCheckboxSemanticLabel;
+
+  /// Callback to get the semantic label for the row.
+  String? Function(TrinaRow row)? rowSemanticLabel;
+
   /// Sort rows by tapping on the column heading.
   bool enableSorting;
 
@@ -323,6 +332,9 @@ class TrinaColumn {
     this.filterWidgetDelegate =
         const TrinaFilterColumnWidgetDelegate.textField(),
     this.disableRowCheckboxWhen,
+    this.titleCheckboxSemanticLabel,
+    this.rowCheckboxSemanticLabel,
+    this.rowSemanticLabel,
     this.validator,
     this.editCellRenderer,
     this.filterEnterKeyAction,

@@ -429,7 +429,10 @@ class _ColumnWidget extends StatelessWidget {
                     if (column.enableRowChecked &&
                         column.rowCheckBoxGroupDepth == 0 &&
                         column.enableTitleChecked)
-                      CheckboxAllSelectionWidget(stateManager: stateManager),
+                      CheckboxAllSelectionWidget(
+                        stateManager: stateManager,
+                        semanticLabel: column.titleCheckboxSemanticLabel,
+                      ),
                     Expanded(
                       child: _ColumnTextWidget(
                         column: column,
@@ -452,7 +455,13 @@ class _ColumnWidget extends StatelessWidget {
 class CheckboxAllSelectionWidget extends TrinaStatefulWidget {
   final TrinaGridStateManager stateManager;
 
-  const CheckboxAllSelectionWidget({required this.stateManager, super.key});
+  final String? semanticLabel;
+
+  const CheckboxAllSelectionWidget({
+    required this.stateManager,
+    required this.semanticLabel,
+    super.key,
+  });
 
   @override
   CheckboxAllSelectionWidgetState createState() =>
@@ -506,11 +515,12 @@ class CheckboxAllSelectionWidgetState
       value: _checked,
       handleOnChanged: _handleOnChanged,
       tristate: true,
-      scale: 0.86,
+      scale: 0.88,
       unselectedColor: stateManager.configuration.style.columnUnselectedColor,
       activeColor: stateManager.configuration.style.columnActiveColor,
       checkColor: stateManager.configuration.style.columnCheckedColor,
       side: stateManager.configuration.style.columnCheckedSide,
+      semanticLabel: widget.semanticLabel,
     );
   }
 }

@@ -425,15 +425,19 @@ class CheckboxSelectionWidgetState
     final disable =
         widget.column.disableRowCheckboxWhen?.call(widget.row) ?? false;
 
+    final semanticLabel =
+        widget.column.rowCheckboxSemanticLabel?.call(widget.row);
+
     return TrinaScaledCheckbox(
       value: _checked,
       handleOnChanged: disable ? null : _handleOnChanged,
       tristate: _tristate,
-      scale: 0.86,
+      scale: 0.88,
       unselectedColor: stateManager.configuration.style.cellUnselectedColor,
       activeColor: stateManager.configuration.style.cellActiveColor,
       checkColor: stateManager.configuration.style.cellCheckedColor,
       side: stateManager.configuration.style.cellCheckedSide,
+      semanticLabel: semanticLabel,
     );
   }
 }

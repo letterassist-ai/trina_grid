@@ -118,30 +118,33 @@ class TrinaBaseCell extends StatelessWidget
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      behavior: HitTestBehavior.translucent,
-      // Essential gestures.
-      onTapUp: _handleOnTapUp,
-      onLongPressStart: _handleOnLongPressStart,
-      onLongPressMoveUpdate: _handleOnLongPressMoveUpdate,
-      onLongPressEnd: _handleOnLongPressEnd,
-      // Optional gestures.
-      onDoubleTap: _onDoubleTapOrNull(),
-      onSecondaryTapDown: _onSecondaryTapOrNull(),
-      child: _CellContainer(
-        cell: cell,
-        rowIdx: rowIdx,
-        row: row,
-        column: column,
-        cellPadding: column.cellPadding ??
-            stateManager.configuration.style.defaultCellPadding,
-        stateManager: stateManager,
-        child: _Cell(
-          stateManager: stateManager,
-          rowIdx: rowIdx,
-          column: column,
-          row: row,
+    return Semantics(
+      label: column.rowSemanticLabel?.call(row),
+      child: GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        // Essential gestures.
+        onTapUp: _handleOnTapUp,
+        onLongPressStart: _handleOnLongPressStart,
+        onLongPressMoveUpdate: _handleOnLongPressMoveUpdate,
+        onLongPressEnd: _handleOnLongPressEnd,
+        // Optional gestures.
+        onDoubleTap: _onDoubleTapOrNull(),
+        onSecondaryTapDown: _onSecondaryTapOrNull(),
+        child: _CellContainer(
           cell: cell,
+          rowIdx: rowIdx,
+          row: row,
+          column: column,
+          cellPadding: column.cellPadding ??
+              stateManager.configuration.style.defaultCellPadding,
+          stateManager: stateManager,
+          child: _Cell(
+            stateManager: stateManager,
+            rowIdx: rowIdx,
+            column: column,
+            row: row,
+            cell: cell,
+          ),
         ),
       ),
     );
