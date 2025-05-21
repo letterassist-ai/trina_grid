@@ -120,6 +120,7 @@ class TrinaBaseCell extends StatelessWidget
   Widget build(BuildContext context) {
     return Semantics(
       label: column.rowSemanticLabel?.call(row),
+      blockUserActions: true,
       child: GestureDetector(
         behavior: HitTestBehavior.translucent,
         // Essential gestures.
