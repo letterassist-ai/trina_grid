@@ -76,6 +76,7 @@ class TrinaGridStateChangeNotifier extends TrinaChangeNotifier
     this.rowWrapper,
     this.editCellRenderer,
     this.onChanged,
+    this.canSelectCallbackTest,
     this.onSelected,
     this.onSorted,
     this.onRowChecked,
@@ -142,6 +143,9 @@ class TrinaGridStateChangeNotifier extends TrinaChangeNotifier
 
   @override
   final TrinaOnChangedEventCallback? onChanged;
+
+  @override
+  final TrinaCanSelectCallbackTest? canSelectCallbackTest;
 
   @override
   final TrinaOnSelectedEventCallback? onSelected;
@@ -307,6 +311,7 @@ class TrinaGridStateManager extends TrinaGridStateChangeNotifier {
     super.editCellRenderer,
     super.columnGroups,
     super.onChanged,
+    super.canSelectCallbackTest,
     super.onSelected,
     super.onSorted,
     super.onRowChecked,

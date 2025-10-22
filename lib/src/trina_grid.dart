@@ -15,6 +15,9 @@ typedef TrinaOnLoadedEventCallback = void Function(
 typedef TrinaOnChangedEventCallback = void Function(
     TrinaGridOnChangedEvent event);
 
+typedef TrinaCanSelectCallbackTest = Future<bool> Function(
+    TrinaGridOnSelectedEvent event);
+
 typedef TrinaOnSelectedEventCallback = void Function(
     TrinaGridOnSelectedEvent event);
 
@@ -87,6 +90,7 @@ class TrinaGrid extends TrinaStatefulWidget {
     this.columnGroups,
     this.onLoaded,
     this.onChanged,
+    this.canSelectCallbackTest,
     this.onSelected,
     this.onSorted,
     this.onRowChecked,
@@ -198,6 +202,11 @@ class TrinaGrid extends TrinaStatefulWidget {
   /// The [onChanged] callback is not called.
   /// {@endtemplate}
   final TrinaOnChangedEventCallback? onChanged;
+
+  /// {@template trina_grid_property_canSelectCallbackTest}
+  /// [canSelectCallbackTest] is called to test if the cell can be selected.
+  /// {@endtemplate}
+  final TrinaCanSelectCallbackTest? canSelectCallbackTest;
 
   /// {@template trina_grid_property_onSelected}
   /// [onSelected] can receive a response only if [TrinaGrid.mode] is set to [TrinaGridMode.select] .
@@ -588,6 +597,7 @@ class TrinaGridState extends TrinaStateWithChange<TrinaGrid> {
       editCellRenderer: widget.editCellRenderer,
       columnGroups: widget.columnGroups,
       onChanged: widget.onChanged,
+      canSelectCallbackTest: widget.canSelectCallbackTest,
       onSelected: widget.onSelected,
       onSorted: widget.onSorted,
       onRowChecked: widget.onRowChecked,

@@ -80,18 +80,24 @@ class TrinaGridCellGestureEvent extends TrinaGridEvent {
   }
 
   void _onLongPressEnd(TrinaGridStateManager stateManager) {
-    _setCurrentCell(stateManager, cell, rowIdx);
+    stateManager.handleCanSelectTest().then(
+      (canSelect) {
+        if (canSelect) {
+          _setCurrentCell(stateManager, cell, rowIdx);
 
-    stateManager.setSelecting(false);
+          stateManager.setSelecting(false);
 
-    TrinaGridScrollUpdateEvent.stopScroll(
-      stateManager,
-      TrinaGridScrollUpdateDirection.all,
+          TrinaGridScrollUpdateEvent.stopScroll(
+            stateManager,
+            TrinaGridScrollUpdateDirection.all,
+          );
+
+          if (stateManager.mode.isMultiSelectMode) {
+            stateManager.handleOnSelected();
+          }
+        }
+      },
     );
-
-    if (stateManager.mode.isMultiSelectMode) {
-      stateManager.handleOnSelected();
-    }
   }
 
   void _onDoubleTap(TrinaGridStateManager stateManager) {
@@ -126,50 +132,62 @@ class TrinaGridCellGestureEvent extends TrinaGridEvent {
   }
 
   void _selecting(TrinaGridStateManager stateManager) {
-    bool callOnSelected = stateManager.mode.isMultiSelectMode;
+    stateManager.handleCanSelectTest().then(
+      (canSelect) {
+        if (canSelect) {
+          bool callOnSelected = stateManager.mode.isMultiSelectMode;
 
-    if (stateManager.keyPressed.shift) {
-      final int? columnIdx = stateManager.columnIndex(column);
+          if (stateManager.keyPressed.shift) {
+            final int? columnIdx = stateManager.columnIndex(column);
 
-      stateManager.setCurrentSelectingPosition(
-        cellPosition: TrinaGridCellPosition(
-          columnIdx: columnIdx,
-          rowIdx: rowIdx,
-        ),
-      );
-    } else if (stateManager.keyPressed.ctrl) {
-      stateManager.toggleSelectingRow(rowIdx);
-    } else {
-      callOnSelected = false;
-    }
+            stateManager.setCurrentSelectingPosition(
+              cellPosition: TrinaGridCellPosition(
+                columnIdx: columnIdx,
+                rowIdx: rowIdx,
+              ),
+            );
+          } else if (stateManager.keyPressed.ctrl) {
+            stateManager.toggleSelectingRow(rowIdx);
+          } else {
+            callOnSelected = false;
+          }
 
-    if (callOnSelected) {
-      stateManager.handleOnSelected();
-    }
+          if (callOnSelected) {
+            stateManager.handleOnSelected();
+          }
+        }
+      },
+    );
   }
 
   void _selectMode(TrinaGridStateManager stateManager) {
-    switch (stateManager.mode) {
-      case TrinaGridMode.normal:
-      case TrinaGridMode.readOnly:
-      case TrinaGridMode.popup:
-        return;
-      case TrinaGridMode.select:
-      case TrinaGridMode.selectWithOneTap:
-        if (stateManager.isCurrentCell(cell) == false) {
-          stateManager.setCurrentCell(cell, rowIdx);
+    stateManager.handleCanSelectTest().then(
+      (canSelect) {
+        if (canSelect) {
+          switch (stateManager.mode) {
+            case TrinaGridMode.normal:
+            case TrinaGridMode.readOnly:
+            case TrinaGridMode.popup:
+              return;
+            case TrinaGridMode.select:
+            case TrinaGridMode.selectWithOneTap:
+              if (stateManager.isCurrentCell(cell) == false) {
+                stateManager.setCurrentCell(cell, rowIdx);
 
-          if (!stateManager.mode.isSelectWithOneTap) {
-            return;
+                if (!stateManager.mode.isSelectWithOneTap) {
+                  return;
+                }
+              }
+              break;
+            case TrinaGridMode.multiSelect:
+              stateManager.toggleSelectingRow(rowIdx);
+              break;
           }
-        }
-        break;
-      case TrinaGridMode.multiSelect:
-        stateManager.toggleSelectingRow(rowIdx);
-        break;
-    }
 
-    stateManager.handleOnSelected();
+          stateManager.handleOnSelected();
+        }
+      },
+    );
   }
 
   void _setCurrentCell(

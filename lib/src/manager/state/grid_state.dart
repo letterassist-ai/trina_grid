@@ -14,6 +14,8 @@ abstract class IGridState {
 
   TrinaOnChangedEventCallback? get onChanged;
 
+  TrinaCanSelectCallbackTest? get canSelectCallbackTest;
+
   TrinaOnSelectedEventCallback? get onSelected;
 
   TrinaOnSortedEventCallback? get onSorted;
@@ -73,6 +75,9 @@ abstract class IGridState {
   void setGridMode(TrinaGridMode mode);
 
   void resetCurrentState({bool notify = true});
+
+  /// Test if the cell can be selected.
+  void handleCanSelectTest();
 
   /// Event occurred after selecting Row in Select mode.
   void handleOnSelected();
@@ -193,6 +198,21 @@ mixin GridState implements ITrinaGridState {
     setEditing(false, notify: false);
 
     notifyListeners(notify, resetCurrentState.hashCode);
+  }
+
+  @override
+  Future<bool> handleCanSelectTest() async {
+    if (canSelectCallbackTest != null) {
+      return await canSelectCallbackTest!(
+        TrinaGridOnSelectedEvent(
+          row: currentRow,
+          rowIdx: currentRowIdx,
+          cell: currentCell,
+          selectedRows: mode.isMultiSelectMode ? currentSelectingRows : null,
+        ),
+      );
+    }
+    return true;
   }
 
   @override
