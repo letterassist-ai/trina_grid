@@ -29,6 +29,13 @@ class TrinaGridConfiguration {
   /// Important: Only works with mode: TrinaGridMode.selectWithOneTap,
   final TrinaGridRowSelectionCheckBoxBehavior rowSelectionCheckBoxBehavior;
 
+  /// When true, selected rows and cells remain highlighted even after the grid loses focus.
+  /// When false, highlighting is removed when the grid loses focus (default behavior).
+  ///
+  /// This is useful for maintaining visual feedback about the current selection
+  /// when users interact with other UI elements outside the grid.
+  final bool enablePersistentSelectionHighlight;
+
   /// [TrinaEnterKeyAction.EditingAndMoveDown]
   /// It switches to the editing state, and moves down in the editing state.
   ///
@@ -96,6 +103,7 @@ class TrinaGridConfiguration {
     this.enableMoveHorizontalInEditing = false,
     this.rowSelectionCheckBoxBehavior =
         TrinaGridRowSelectionCheckBoxBehavior.none,
+    this.enablePersistentSelectionHighlight = false,
     this.enterKeyAction = TrinaGridEnterKeyAction.editingAndMoveDown,
     this.tabKeyAction = TrinaGridTabKeyAction.normal,
     this.shortcut = const TrinaGridShortcut(),
@@ -111,6 +119,7 @@ class TrinaGridConfiguration {
     this.enableMoveHorizontalInEditing = false,
     this.rowSelectionCheckBoxBehavior =
         TrinaGridRowSelectionCheckBoxBehavior.none,
+    this.enablePersistentSelectionHighlight = false,
     this.enterKeyAction = TrinaGridEnterKeyAction.editingAndMoveDown,
     this.tabKeyAction = TrinaGridTabKeyAction.normal,
     this.shortcut = const TrinaGridShortcut(),
@@ -151,6 +160,8 @@ class TrinaGridConfiguration {
   TrinaGridConfiguration copyWith({
     bool? enableMoveDownAfterSelecting,
     bool? enableMoveHorizontalInEditing,
+    TrinaGridRowSelectionCheckBoxBehavior? rowSelectionCheckBoxBehavior,
+    bool? enablePersistentSelectionHighlight,
     TrinaGridEnterKeyAction? enterKeyAction,
     TrinaGridTabKeyAction? tabKeyAction,
     TrinaGridShortcut? shortcut,
@@ -165,6 +176,10 @@ class TrinaGridConfiguration {
           enableMoveDownAfterSelecting ?? this.enableMoveDownAfterSelecting,
       enableMoveHorizontalInEditing:
           enableMoveHorizontalInEditing ?? this.enableMoveHorizontalInEditing,
+      rowSelectionCheckBoxBehavior:
+          rowSelectionCheckBoxBehavior ?? this.rowSelectionCheckBoxBehavior,
+      enablePersistentSelectionHighlight: enablePersistentSelectionHighlight ??
+          this.enablePersistentSelectionHighlight,
       enterKeyAction: enterKeyAction ?? this.enterKeyAction,
       tabKeyAction: tabKeyAction ?? this.tabKeyAction,
       shortcut: shortcut ?? this.shortcut,
@@ -185,6 +200,10 @@ class TrinaGridConfiguration {
                 other.enableMoveDownAfterSelecting &&
             enableMoveHorizontalInEditing ==
                 other.enableMoveHorizontalInEditing &&
+            rowSelectionCheckBoxBehavior ==
+                other.rowSelectionCheckBoxBehavior &&
+            enablePersistentSelectionHighlight ==
+                other.enablePersistentSelectionHighlight &&
             enterKeyAction == other.enterKeyAction &&
             tabKeyAction == other.tabKeyAction &&
             shortcut == other.shortcut &&
@@ -199,6 +218,8 @@ class TrinaGridConfiguration {
   int get hashCode => Object.hash(
         enableMoveDownAfterSelecting,
         enableMoveHorizontalInEditing,
+        rowSelectionCheckBoxBehavior,
+        enablePersistentSelectionHighlight,
         enterKeyAction,
         tabKeyAction,
         shortcut,

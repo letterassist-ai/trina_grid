@@ -273,7 +273,13 @@ class _RowContainerWidgetState extends TrinaStateWithChange<_RowContainerWidget>
 
     Color rowColor = _rowColor;
 
-    if ((isCurrentRow && stateManager.hasFocus) || isSelectedRow) {
+    final shouldHighlight = isCurrentRow || isSelectedRow;
+    final persistentHighlight =
+        stateManager.configuration.enablePersistentSelectionHighlight;
+    final shouldShowHighlight =
+        shouldHighlight && (persistentHighlight || stateManager.hasFocus);
+
+    if (shouldShowHighlight) {
       rowColor = stateManager.configuration.style.activatedColor;
     } else if (isCheckedRow) {
       rowColor = stateManager.configuration.style.rowCheckedColor;

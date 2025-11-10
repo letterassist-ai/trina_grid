@@ -237,16 +237,21 @@ class _CellContainerState extends TrinaStateWithChange<_CellContainer> {
     required Color cellColorInEditState,
     required Color cellColorInReadOnlyState,
     required TrinaGridSelectingMode selectingMode,
+    required bool enablePersistentSelectionHighlight,
   }) {
-    if (!hasFocus) {
-      return gridBackgroundColor;
+    if (isEditing) {
+      // When editing, still require focus for edit state colors
+      if (!hasFocus) {
+        return gridBackgroundColor;
+      }
+      return readOnly == true ? cellColorInReadOnlyState : cellColorInEditState;
     }
 
-    if (!isEditing) {
-      return selectingMode.isRow ? activatedColor : null;
+    // When not editing, show activated color if persistent highlight is enabled or grid has focus
+    if (enablePersistentSelectionHighlight || hasFocus) {
+      return activatedColor;
     }
-
-    return readOnly == true ? cellColorInReadOnlyState : cellColorInEditState;
+    return null;
   }
 
   BoxDecoration _boxDecoration({
@@ -272,6 +277,10 @@ class _CellContainerState extends TrinaStateWithChange<_CellContainer> {
     final Color dirtyColor = stateManager.configuration.style.cellDirtyColor;
 
     if (isCurrentCell) {
+      final persistentHighlight =
+          stateManager.configuration.enablePersistentSelectionHighlight;
+      final shouldShowBorder = persistentHighlight || hasFocus;
+
       return BoxDecoration(
         color: isDirty
             ? dirtyColor
@@ -284,9 +293,11 @@ class _CellContainerState extends TrinaStateWithChange<_CellContainer> {
                 cellColorInReadOnlyState: cellColorInReadOnlyState,
                 cellColorInEditState: cellColorInEditState,
                 selectingMode: selectingMode,
+                enablePersistentSelectionHighlight: persistentHighlight,
               ),
         border: Border.all(
-          color: hasFocus ? activatedBorderColor : inactivatedBorderColor,
+          color:
+              shouldShowBorder ? activatedBorderColor : inactivatedBorderColor,
           width: 1,
         ),
       );

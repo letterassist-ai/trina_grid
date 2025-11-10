@@ -209,12 +209,16 @@ class TrinaTimeCellState extends State<TrinaTimeCell>
     final cell = renderContext.cell;
 
     final isCurrentCell = renderContext.stateManager.isCurrentCell(cell);
+    final hasFocus = renderContext.stateManager.hasFocus;
+    final persistentHighlight = renderContext
+        .stateManager.configuration.enablePersistentSelectionHighlight;
+    final shouldHighlight = isCurrentCell && (persistentHighlight || hasFocus);
 
-    final cellColor = isCurrentCell && renderContext.stateManager.hasFocus
+    final cellColor = shouldHighlight
         ? widget.stateManager.style.activatedBorderColor
         : widget.stateManager.style.gridBackgroundColor;
 
-    final textColor = isCurrentCell && renderContext.stateManager.hasFocus
+    final textColor = shouldHighlight
         ? widget.stateManager.style.gridBackgroundColor
         : widget.stateManager.style.cellTextStyle.color;
 
@@ -222,14 +226,12 @@ class TrinaTimeCellState extends State<TrinaTimeCell>
       decoration: BoxDecoration(
         color: cellColor,
         shape: BoxShape.circle,
-        border: !isCurrentCell
-            ? null
-            : !renderContext.stateManager.hasFocus
-                ? Border.all(
-                    color: widget.stateManager.style.activatedBorderColor,
-                    width: 1,
-                  )
-                : null,
+        border: shouldHighlight
+            ? Border.all(
+                color: widget.stateManager.style.activatedBorderColor,
+                width: 1,
+              )
+            : null,
       ),
       child: Padding(
         padding: const EdgeInsets.all(5),
