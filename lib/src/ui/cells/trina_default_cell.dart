@@ -358,7 +358,6 @@ class CheckboxSelectionWidgetState
   bool _tristate = false;
 
   bool? _checked;
-  bool _pureValue = false;
 
   @override
   TrinaGridStateManager get stateManager => widget.stateManager;
@@ -367,7 +366,6 @@ class CheckboxSelectionWidgetState
   void initState() {
     super.initState();
     updateState(TrinaNotifierEventForceUpdate.instance);
-    _pureValue = widget.row.checked ?? false;
   }
 
   @override
@@ -375,7 +373,8 @@ class CheckboxSelectionWidgetState
     final disable =
         widget.column.disableRowCheckboxWhen?.call(widget.row) ?? false;
     if (disable) {
-      _checked = _pureValue;
+      // Keep the check already stored on the row while the box is disabled.
+      _checked = widget.row.checked == true;
       return;
     }
 
